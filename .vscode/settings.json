@@ -1,0 +1,4 @@
+{
+    "php.validate.executablePath": "/Applications/MAMP/bin/php/php7.2.10/bin/php",
+    "php.validate.run": "onType"
+}
