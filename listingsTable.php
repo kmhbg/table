@@ -34,7 +34,7 @@
         <a class="nav-link" href="welcome.php">Startsidan <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="listingsTable.php">Listningar</a>
+        <a class="nav-link" href="table.php">Masterdata</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="newMaterial.php">Nytt material</a>
@@ -58,10 +58,82 @@
     </ul>
   </div>
 </nav>
+<br>
 
 
+<?php
+if(isset($_POST['update']))
+{
+$servername = "localhost:8889";
+$username = "root";
+$password = "root";
+$dbname = "master";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+    //be sure to validate and clean your variables
+    $matnum = $_POST['matnum'];
+    $listnum = $_POST['listnum'];
+    $list = $_POST['list'];
+ 
+    //then you can use them in a PHP function. 
+    // $result = myFunction($val1, $val2);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+$sql = "UPDATE `mast` SET $list= $listnum WHERE `New_mat`='$matnum'";
 
 
+if (mysqli_query($conn, $sql)) {
+    echo "Record updated successfully";
+} else {
+    echo "Error updating record: " . mysqli_error($conn);
+    printf("Errormessage: %s\n", mysqli_error($conn));
+}
+
+mysqli_close($conn);
+}
+?>
+
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Lägg till ny listning i masterdatan
+  </button>
+
+
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+<form action="listingsTable.php" method="post">
+  <H3>Lägg in listning</H3>
+  <div class="form-group">
+    <label for="formGroupExampleInput">Vårt material nummer</label>
+    <input type="text" class="form-control" name="matnum" id="matnum" placeholder="Materialnummer" required>
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Listningsnummer</label>
+    <input type="text" class="form-control" name="listnum" id="listnum" placeholder="Listning" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Välj kund</label>
+    <select class="form-control" name="list" id="list">
+      <option>ICA</option>
+      <option>EEL</option>
+      <option>Mediamarkt</option>
+      <option>Bdahl</option>
+      <option>Axfood</option>
+      <option>Coop</option>
+      <option>Expert</option>
+      <option>Elkjop</option>
+      <!-- SQLkod för uppdatering av lista UPDATE `mast` SET `ICA`='' WHERE `New_mat`='6765067' -->
+    </select>
+  </div>
+  <button type="submit" name="update" class="btn btn-primary">Lägg in listning</button>
+</form>
+</div>
+</div>
+<br>
 
 <!-- <a class="btn btn-primary btn-lg" href="welcome.php">Back</a> -->
 <input type="text" id="inputfilter"  placeholder="Sök i masterdatan">
@@ -98,11 +170,11 @@ if(mysqli_connect_errno()){
 }
 
 //get results from database
-$result = mysqli_query($connection,"SELECT * FROM mast");
+$result = mysqli_query($connection,"SELECT `Brand`,`New_mat`,`Art_nr`,`Description_SE`,`ICA`, `Coop`, `Bdahl`, `Axfood`, `EEL`, `Elkjop`, `Mediamarkt`, `Expert` FROM `mast`");
 $all_property = array();  //declare an array for saving property
 
 //showing property
-echo '<table id="myTable" class="table table-striped">
+echo '<div><table id="myTable" class="table table-striped">
         <thead>
         <tr class="header">';  //initialize table tag
 while ($property = mysqli_fetch_field($result)) {
@@ -120,7 +192,7 @@ while ($row = mysqli_fetch_array($result)) {
     }
     echo '</tr>';
 }
-echo "</table>";
+echo "</table></div>";
 ?>
 
 
@@ -153,7 +225,6 @@ function myFunction() {
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -181,9 +252,7 @@ $(document).ready(function(){
 		});
 	});
 });
-$('#myModal').on('shown.bs.modal', function () {
-  $('#myInput').trigger('focus')
-})
+
 
 </script>
 
