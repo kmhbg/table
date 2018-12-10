@@ -45,6 +45,9 @@
       <li class="nav-item">
         <a class="nav-link" href="logout.php">Logga ut</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Användare: <?php echo htmlspecialchars($_SESSION["username"]); ?></a>
+      </li>
       <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Dropdown link
